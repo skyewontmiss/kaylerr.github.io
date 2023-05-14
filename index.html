@@ -1,87 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-      }
-      #accelerometer-data {
-        font-size: 24px;
-        margin-bottom: 20px;
-      }
-      #gyroscope-data {
-        font-size: 24px;
-        margin-bottom: 20px;
-      }
-      #console-data {
-        font-size: 18px;
-      }
-    </style>
+    <meta charset="UTF-8">
+    <title>Gyroscope and Accelerometer Data</title>
   </head>
   <body>
-    <div>
-      <h1>Accelerometer data:</h1>
-      <div id="accelerometer-data"></div>
-      <h1>Gyroscope data:</h1>
-      <div id="gyroscope-data"></div>
-      <h1>Console log:</h1>
-      <div id="console-data"></div>
-    </div>
-
-    <script>
-      // Function to update the accelerometer and gyroscope data every frame
-      function update() {
-        requestAnimationFrame(update);
-        let accelerometerData = "";
-        let gyroscopeData = "";
-
-        // Get accelerometer data
-        if (typeof DeviceMotionEvent.requestPermission === 'function') {
-          DeviceMotionEvent.requestPermission()
-            .then(permissionState => {
-              if (permissionState === 'granted') {
-                window.addEventListener('devicemotion', event => {
-                  accelerometerData = "Accelerometer: x=" + event.acceleration.x + ", y=" + event.acceleration.y + ", z=" + event.acceleration.z;
-                  document.getElementById("accelerometer-data").textContent = accelerometerData;
-                });
-              }
-            })
-            .catch(console.error);
-        } else {
-          window.addEventListener('devicemotion', event => {
-            accelerometerData = "Accelerometer: x=" + event.acceleration.x + ", y=" + event.acceleration.y + ", z=" + event.acceleration.z;
-            document.getElementById("accelerometer-data").textContent = accelerometerData;
-          });
-        }
-
-        // Get gyroscope data
-        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-          DeviceOrientationEvent.requestPermission()
-            .then(permissionState => {
-              if (permissionState === 'granted') {
-                window.addEventListener('deviceorientation', event => {
-                  gyroscopeData = "Gyroscope: alpha=" + event.alpha + ", beta=" + event.beta + ", gamma=" + event.gamma;
-                  document.getElementById("gyroscope-data").textContent = gyroscopeData;
-                });
-              }
-            })
-            .catch(console.error);
-        } else {
-          window.addEventListener('deviceorientation', event => {
-            gyroscopeData = "Gyroscope: alpha=" + event.alpha + ", beta=" + event.beta + ", gamma=" + event.gamma;
-            document.getElementById("gyroscope-data").textContent = gyroscopeData;
-          });
-        }
-      }
-
-      // Call the update function to start updating data every frame
-      update();
-
-      // Override console.log to also display messages in the console-data div
-      console.log = function (message) {
-        document.getElementById("console-data").innerHTML += message + "<br>";
-      };
-    </script>
+    <h1>Gyroscope and Accelerometer Data</h1>
+    
+    <p>Gyroscope:</p>
+    <div id="gyro-text"></div>
+    
+    <p>Accelerometer:</p>
+    <div id="accel-text"></div>
+    
+    <script src="wiimote.js"></script>
   </body>
 </html>
