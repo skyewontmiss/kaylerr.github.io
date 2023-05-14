@@ -1,30 +1,33 @@
-if (typeof DeviceOrientationEvent.requestPermission === "function") {
-  DeviceOrientationEvent.requestPermission().then(permissionState => {
-    if (permissionState === "granted") {
-      // the user granted permission to access the device orientation data
-      // you can register event listeners for deviceorientation events here
-      window.addEventListener("deviceorientation", handleOrientation);
-      window.addEventListener("devicemotion", handleMotion);
-    } else {
-      // the user denied permission to access the device orientation data
-      console.log("Permission to access device orientation data was denied.");
-    }
-  });
-} else {
-  // the device doesn't support the DeviceOrientationEvent interface
-  console.log("Device orientation data is not supported on this device.");
-}
+// Get the text objects to display the data
+var gyroText = document.getElementById("gyro-text");
+var accelText = document.getElementById("accel-text");
 
+// Add event listeners to the window object
+window.addEventListener("deviceorientation", handleOrientation, true);
+window.addEventListener("devicemotion", handleMotion, true);
+
+// Handle the orientation event
 function handleOrientation(event) {
+  // Get the orientation data
   var alpha = event.alpha;
   var beta = event.beta;
   var gamma = event.gamma;
-  var orientationData = "Orientation: alpha=" + alpha + ", beta=" + beta + ", gamma=" + gamma;
-  document.getElementById("orientation-data").innerHTML = orientationData;
+  
+  // Update the text object with the orientation data
+  gyroText.innerHTML = "Alpha: " + alpha + "<br>Beta: " + beta + "<br>Gamma: " + gamma;
 }
 
+// Handle the motion event
 function handleMotion(event) {
+  // Get the acceleration data
   var acceleration = event.acceleration;
-  var accelerationData = "Acceleration: x=" + acceleration.x + ", y=" + acceleration.y + ", z=" + acceleration.z;
-  document.getElementById("acceleration-data").innerHTML = accelerationData;
+  var accelerationIncludingGravity = event.accelerationIncludingGravity;
+  var rotationRate = event.rotationRate;
+  var interval = event.interval;
+  
+  // Update the text object with the acceleration data
+  accelText.innerHTML = "Acceleration: " + acceleration.x + ", " + acceleration.y + ", " + acceleration.z + "<br>" +
+                        "Acceleration including gravity: " + accelerationIncludingGravity.x + ", " + accelerationIncludingGravity.y + ", " + accelerationIncludingGravity.z + "<br>" +
+                        "Rotation rate: " + rotationRate.alpha + ", " + rotationRate.beta + ", " + rotationRate.gamma + "<br>" +
+                        "Interval: " + interval;
 }
