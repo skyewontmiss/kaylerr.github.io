@@ -5,7 +5,8 @@ function update() {
 
 function handleOrientation() {
   var gyroscopeData = "Gyroscope: alpha=" + event.alpha + ", beta=" + event.beta + ", gamma=" + event.gamma;
-  var accelerometerData = "Accelerometer: x=" + event.acceleration.x + ", y=" + event.acceleration.y + ", z=" + event.acceleration.z;
+  var accelerationData = event.accelerationIncludingGravity;
+  var accelerometerData = "Accelerometer: x=" + accelerationData.x + ", y=" + accelerationData.y + ", z=" + accelerationData.z;
   
   document.getElementById("gyroscopeData").innerHTML = gyroscopeData;
   document.getElementById("accelerometerData").innerHTML = accelerometerData;
