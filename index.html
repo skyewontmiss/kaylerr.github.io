@@ -8,18 +8,41 @@
     <p id="gyroscope"></p>
     <p id="accelerometer"></p>
     <script>
-      window.addEventListener("devicemotion", function(event) {
-        var gyroscopeData = "Gyroscope: alpha=" + event.rotationRate.alpha + ", beta=" + event.rotationRate.beta + ", gamma=" + event.rotationRate.gamma;
-        var accelerometerData = "Accelerometer: x=" + event.acceleration.x + ", y=" + event.acceleration.y + ", z=" + event.acceleration.z;
-        document.getElementById("gyroscope").textContent = gyroscopeData;
-        document.getElementById("accelerometer").textContent = accelerometerData;
-      });
-      
-      function update() {
-        requestAnimationFrame(update);
-        // code to update data goes here
+      if (typeof DeviceMotionEvent.requestPermission === 'function') {
+        // iOS 13+
+        DeviceMotionEvent.requestPermission()
+          .then(permissionState => {
+            if (permissionState === 'granted') {
+              window.addEventListener("devicemotion", function(event) {
+                var gyroscopeData = "Gyroscope: alpha=" + event.rotationRate.alpha + ", beta=" + event.rotationRate.beta + ", gamma=" + event.rotationRate.gamma;
+                var accelerometerData = "Accelerometer: x=" + event.acceleration.x + ", y=" + event.acceleration.y + ", z=" + event.acceleration.z;
+                document.getElementById("gyroscope").textContent = gyroscopeData;
+                document.getElementById("accelerometer").textContent = accelerometerData;
+              });
+              
+              function update() {
+                requestAnimationFrame(update);
+                // code to update data goes here
+              }
+              update();
+            }
+          })
+          .catch(console.error);
+      } else {
+        // non iOS 13+
+        window.addEventListener("devicemotion", function(event) {
+          var gyroscopeData = "Gyroscope: alpha=" + event.rotationRate.alpha + ", beta=" + event.rotationRate.beta + ", gamma=" + event.rotationRate.gamma;
+          var accelerometerData = "Accelerometer: x=" + event.acceleration.x + ", y=" + event.acceleration.y + ", z=" + event.acceleration.z;
+          document.getElementById("gyroscope").textContent = gyroscopeData;
+          document.getElementById("accelerometer").textContent = accelerometerData;
+        });
+        
+        function update() {
+          requestAnimationFrame(update);
+          // code to update data goes here
+        }
+        update();
       }
-      update();
     </script>
   </body>
 </html>
