@@ -9,9 +9,11 @@ function handleOrientation(event) {
 
 function update() {
   window.requestAnimationFrame(update);
-  handleOrientation();
+  handleOrientation(event); // pass the `event` object as an argument
 }
 
-window.addEventListener("deviceorientation", handleOrientation, true);
+window.addEventListener("deviceorientation", function(event) {
+  handleOrientation(event); // pass the `event` object as an argument
+}, true);
 
 update();
