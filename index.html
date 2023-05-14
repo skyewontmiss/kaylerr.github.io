@@ -1,36 +1,49 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Gyroscope and Accelerometer Example</title>
-  </head>
-  <body>
+<head>
+    <title>Gyroscope and Accelerometer Data</title>
+</head>
+<body>
     <h1>Gyroscope and Accelerometer Data:</h1>
-    <p id="gyro-data">Waiting for gyroscope data...</p>
-    <p id="accel-data">Waiting for accelerometer data...</p>
+    <p>Accelerometer X: <span id="accel-x"></span></p>
+    <p>Accelerometer Y: <span id="accel-y"></span></p>
+    <p>Accelerometer Z: <span id="accel-z"></span></p>
+    <p>Gyroscope Alpha: <span id="gyro-alpha"></span></p>
+    <p>Gyroscope Beta: <span id="gyro-beta"></span></p>
+    <p>Gyroscope Gamma: <span id="gyro-gamma"></span></p>
+    <p id="console"></p>
 
     <script>
-      if (typeof(DeviceMotionEvent) !== "undefined" && typeof(DeviceMotionEvent.requestPermission) === "function") {
-        DeviceMotionEvent.requestPermission()
-          .then(permissionState => {
-            if (permissionState === "granted") {
-              window.addEventListener("devicemotion", handleMotionEvent, true);
-            } else {
-              console.log("Permission to access device motion sensors was denied.");
-            }
-          })
-          .catch(console.error);
-          document.getElementById("accel-data").textContent = console.error;
-      } else {
-document.getElementById("accel-data").textContent = "Device motion sensors not supported.";
-      }
+        var consoleEl = document.getElementById("console");
+        function update() {
+            var accelElX = document.getElementById("accel-x");
+            var accelElY = document.getElementById("accel-y");
+            var accelElZ = document.getElementById("accel-z");
+            var gyroElAlpha = document.getElementById("gyro-alpha");
+            var gyroElBeta = document.getElementById("gyro-beta");
+            var gyroElGamma = document.getElementById("gyro-gamma");
 
-      function handleMotionEvent(event) {
-        var gyroData = "Gyroscope: alpha=" + event.rotationRate.alpha + ", beta=" + event.rotationRate.beta + ", gamma=" + event.rotationRate.gamma;
-        document.getElementById("gyro-data").textContent = gyroData;
+            // Get accelerometer data
+            var accelData = new Accelerometer({frequency:60});
+            accelData.addEventListener("reading", function(){
+                accelElX.textContent = accelData.x;
+                accelElY.textContent = accelData.y;
+                accelElZ.textContent = accelData.z;
+            });
 
-        var accelData = "Accelerometer: x=" + event.acceleration.x + ", y=" + event.acceleration.y + ", z=" + event.acceleration.z;
-        document.getElementById("accel-data").textContent = accelData;
-      }
+            // Get gyroscope data
+            var gyroData = new Gyroscope({frequency:60});
+            gyroData.addEventListener("reading", function(){
+                gyroElAlpha.textContent = gyroData.alpha;
+                gyroElBeta.textContent = gyroData.beta;
+                gyroElGamma.textContent = gyroData.gamma;
+            });
+
+            consoleEl.textContent = "Accelerometer: x=" + accelData.x + ", y=" + accelData.y + ", z=" + accelData.z + " | " +
+                                     "Gyroscope: alpha=" + gyroData.alpha + ", beta=" + gyroData.beta + ", gamma=" + gyroData.gamma;
+        }
+
+        setInterval(update, 16); // 60fps update loop
     </script>
-  </body>
+</body>
 </html>
