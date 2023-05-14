@@ -19,8 +19,9 @@
             }
           })
           .catch(console.error);
+          document.getElementById("accel-data").textContent = console.error;
       } else {
-        console.log("Device motion sensors not supported.");
+document.getElementById("accel-data").textContent = "Device motion sensors not supported.";
       }
 
       function handleMotionEvent(event) {
