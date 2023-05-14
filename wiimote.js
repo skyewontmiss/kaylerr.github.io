@@ -1,19 +1,30 @@
+if (typeof DeviceOrientationEvent.requestPermission === "function") {
+  DeviceOrientationEvent.requestPermission().then(permissionState => {
+    if (permissionState === "granted") {
+      // the user granted permission to access the device orientation data
+      // you can register event listeners for deviceorientation events here
+      window.addEventListener("deviceorientation", handleOrientation);
+      window.addEventListener("devicemotion", handleMotion);
+    } else {
+      // the user denied permission to access the device orientation data
+      console.log("Permission to access device orientation data was denied.");
+    }
+  });
+} else {
+  // the device doesn't support the DeviceOrientationEvent interface
+  console.log("Device orientation data is not supported on this device.");
+}
+
 function handleOrientation(event) {
-  var gyroscopeData = "Gyroscope: alpha=" + event.alpha + ", beta=" + event.beta + ", gamma=" + event.gamma;
-  var accelerationData = event.accelerationIncludingGravity;
-  var accelerometerData = "Accelerometer: x=" + accelerationData.x + ", y=" + accelerationData.y + ", z=" + accelerationData.z;
-  
-  document.getElementById("gyroscopeData").innerHTML = gyroscopeData;
-  document.getElementById("accelerometerData").innerHTML = accelerometerData;
+  var alpha = event.alpha;
+  var beta = event.beta;
+  var gamma = event.gamma;
+  var orientationData = "Orientation: alpha=" + alpha + ", beta=" + beta + ", gamma=" + gamma;
+  document.getElementById("orientation-data").innerHTML = orientationData;
 }
 
-function update() {
-  window.requestAnimationFrame(update);
-  handleOrientation(event); // pass the `event` object as an argument
+function handleMotion(event) {
+  var acceleration = event.acceleration;
+  var accelerationData = "Acceleration: x=" + acceleration.x + ", y=" + acceleration.y + ", z=" + acceleration.z;
+  document.getElementById("acceleration-data").innerHTML = accelerationData;
 }
-
-window.addEventListener("deviceorientation", function(event) {
-  handleOrientation(event); // pass the `event` object as an argument
-}, true);
-
-update();
